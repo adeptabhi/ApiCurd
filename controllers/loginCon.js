@@ -36,12 +36,20 @@ const addLogin = async (payload) => {
         responseMdl.msg = 'Error'
         responseMdl.status = false;
     } else {
-        responseMdl.data = { id: data[0].insertId, isNewUser: (data[0].affectedRows) == 1 };
+        responseMdl.data = (await getLogin(data[0].insertId)).data;
+        responseMdl.data['isNewUser'] = (data[0].affectedRows) == 1;
         responseMdl.msg = 'Login successfully.';
     }
     return responseMdl;
 }
 
+const updateLogin = async (id) => {
+    log.info('LoginCon', 'updateLogin');
+    const responseMdl = new ResponseMdl();
+    await db.query(`UPDATE ${tableName} SET authorization = ? WHERE id = ?`, ['', id]);
+    responseMdl.msg = 'Logout Successfully';
+    return responseMdl;
+}
 
 const deleteLogin = async (mobileNo) => {
     log.info('LoginCon', 'deleteLogin');
@@ -56,4 +64,4 @@ const deleteLogin = async (mobileNo) => {
     }
     return responseMdl;
 }
-export default { getLogin, addLogin, deleteLogin };
+export default { getLogin, addLogin, deleteLogin, updateLogin };

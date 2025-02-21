@@ -3,16 +3,14 @@ import bodyParser from "body-parser";
 import ResponseMdl from './models/responseMdl.js'
 import dotEnv from 'dotenv';
 import log from './utils/log.js';
-import getRoutes from './routes/getRoutes.js'
-import postRoutes from './routes/postRoutes.js'
-import putRoutes from './routes/putRoutes.js'
-import deleteRoutes from './routes/deleteRoutes.js'
 import db from "./config/db.js";
 import validatePayloadMw from "./middlewares/validatePayloadMw.js";
 import authorizationMw from "./middlewares/authorizationMw.js";
-dotEnv.config();
+import routes from "./routes/routes.js";
+
 
 /*OBJECT*/
+dotEnv.config();
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -57,14 +55,21 @@ app.use('/adeptAbhi', (req, res, next) => {
 
 
 /*ROUTES*/
-app.use('/adeptAbhi', getRoutes);
-app.use('/adeptAbhi', putRoutes);
-app.use('/adeptAbhi', postRoutes);
-app.use('/adeptAbhi', deleteRoutes);
+app.use('/adeptAbhi', async (req, res, next) => {
+    var responseMdl = await routes(req);
+    if (req.path == '/logout') {
+        res.status(401).json(responseMdl.toJson());
+        return;
+    }
+    res.status(200).json(responseMdl.toJson());
+    next();
+
+
+})
 
 /*GLOBAL: ERROR HANDLING:500*/
 app.use((err, req, res, next) => {
-    log.error("App/Error", err.stack);
+    log.error("App", 'Error:' + err.stack);
     res.status(500).send(new ResponseMdl({ msg: err.stack }).toJson());
 });
 

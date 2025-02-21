@@ -12,8 +12,8 @@ const requiredPayloadMw = (fields, payload) => {
             return `Missing required fields:${missingFields.join(", ")}`;
         }
     } catch (error) {
-        log.error('requirePayload', error)
-        return error;
+        log.error('requirePayload', 'Error: ' + error)
+        return 'Internal Error';
     }
     return 'success';
 };

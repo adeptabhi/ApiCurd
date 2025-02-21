@@ -1,30 +1,29 @@
-import express from "express";
 import ResponseMdl from '../models/responseMdl.js';
 import studentCon from "../controllers/studentCon.js";
 import log from '../utils/log.js'
+import loginCon from '../controllers/loginCon.js';
 
-const router = express.Router();
-
-router.get("*", async (req, res) => {
-    const route = req.path;
-    const payload = req.body;
+const getRoute = async (payload, endPoint) => {
     var responseMdl = new ResponseMdl();
-    var statusCode = 200;
-    log.info('GetRoutes/Route', route);
+    log.info('getRoute', 'EndPoint: ' + endPoint);
     try {
-        switch (route) {
+        switch (endPoint) {
             case "/student":
                 responseMdl = await studentCon.getStudent(payload.id);
                 break;
             case "/students":
                 responseMdl = await studentCon.getStudents();
                 break;
+            case "/login":
+                responseMdl = await loginCon.getLogin(payload.userId);
+                break;
         }
     } catch (error) {
         responseMdl.status = false;
-        responseMdl.msg = error;
-        log.error('GetRoutes/Error', error);
+        responseMdl.msg = 'Internal Error';
+        log.error('getRoute', 'Error:' + error);
     }
-    res.status(statusCode).json(responseMdl.toJson());
-});
-export default router;
+    return responseMdl;
+};
+export default getRoute;
+

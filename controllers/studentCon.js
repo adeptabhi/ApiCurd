@@ -18,10 +18,10 @@ const getStudents = async () => {
 
 
 const getStudent = async (id) => {
-    log.info('StudentsCon', 'getStudents');
+    log.info('StudentsCon', 'getStudent');
     const responseMdl = new ResponseMdl();
-    var data = await db.query(id == null ? `SELECT * FROM ${tableName}` : `SELECT * FROM ${tableName} WHERE id=?`, id);
-    if (!data || id == '' && data.length === 0) {
+    var data = await db.query(`SELECT * FROM ${tableName} WHERE id=?`, id);
+    if (!data || data.length === 0) {
         responseMdl.msg = 'No data found.';
         responseMdl.status = false;
     } else
@@ -29,7 +29,7 @@ const getStudent = async (id) => {
             responseMdl.msg = `Invalid student id: ${id}`;
             responseMdl.status = false;
         } else {
-            responseMdl.data = id == null ? data[0] : data[0][0];
+            responseMdl.data = data[0][0];
             responseMdl.msg = 'Data fetch successfully.';
         }
     return responseMdl;
