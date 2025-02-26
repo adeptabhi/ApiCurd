@@ -7,6 +7,8 @@ import db from "./config/db.js";
 import validatePayloadMw from "./middlewares/validatePayloadMw.js";
 import authorizationMw from "./middlewares/authorizationMw.js";
 import routes from "./routes/routes.js";
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from './swagger/swaggerDocs.js';
 
 
 /*OBJECT*/
@@ -17,6 +19,7 @@ const PORT = process.env.PORT || 8080;
 /*MIDDLEWARES<*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/adeptAbhiDocs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/adeptAbhi', (req, res, next) => {
     log.info('App/Type', req.method);
     log.info('App/Headers', req.headers);
