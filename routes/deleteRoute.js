@@ -8,7 +8,7 @@ const deleteRoute = async (payload, endPoint) => {
     try {
         switch (endPoint) {
             case '/student':
-                responseMdl = await studentCon.deleteStudents(payload.id);
+                responseMdl = await studentCon.deleteStudents(payload);
                 break;
         }
     } catch (error) {

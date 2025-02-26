@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -18,13 +19,7 @@ const options = {
       // },
     ],
     components: {
-      // securitySchemes: {
-      //   BearerAuth: {
-      //     type: "http",
-      //     scheme: "bearer",
-      //     bearerFormat: "JWT"
-      //   }
-      // },
+
       responses: {
         Success: {
           description: "Successful Response",
@@ -86,10 +81,69 @@ const options = {
             }
           }
         }
+      },
+      headers: {
+        authorization: {
+          type: "string",
+          example: ""
+        },
+        userid: {
+          type: "string",
+          example: ""
+        }
+      },
+      payload: {
+        studentPost: {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+              example: "John Doe"
+            },
+            age: {
+              type: "integer",
+              example: 25
+            }
+          }
+        },
+        studentPut: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 0
+            },
+            name: {
+              type: "string",
+              example: ""
+            },
+            age: {
+              type: "integer",
+              example: 0
+            }
+          }
+        },
+        studentDelete: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 0
+            }
+          }
+        },
+        studentGet: {
+          type: "object",
+          properties: {
+            id: {
+              type: "integer",
+              example: 0
+            }
+          }
+        }
       }
     }
   },
-
   apis: ['./swagger/swaggerRoutes.js'],
 };
 

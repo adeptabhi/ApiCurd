@@ -11,7 +11,7 @@ const putRoute = async (payload, endPoint) => {
             case '/student':
                 responseMdl = await studentCon.updateStudent(payload);
                 break;
-            case 'logout':
+            case '/logout':
                 responseMdl = await loginCon.updateLogin(payload.userId);
                 break;
         }

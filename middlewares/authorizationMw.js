@@ -8,7 +8,6 @@ const authorizationMw = async (headers) => {
     responseMdl.msg = requiredPayloadMw(['authorization', 'userid'], headers);
     if (responseMdl.msg == 'success') {
         responseMdl = await loginCon.getLogin(headers.userid);
-        log.info('authorizationMw', responseMdl.data);
         if (responseMdl.status) {
             if (headers.authorization == 'adeptAbhi' || headers.authorization == responseMdl.data.authorization) {
                 responseMdl.status = true;
@@ -17,6 +16,9 @@ const authorizationMw = async (headers) => {
                 responseMdl.msg = 'unauthorization';
             }
             responseMdl.data = [];
+        } else {
+            responseMdl.status = false;
+            responseMdl.msg = 'Invalid user id';
         }
     } else {
         responseMdl.msg = responseMdl.msg + ' in headers';

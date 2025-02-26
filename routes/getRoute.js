@@ -9,10 +9,10 @@ const getRoute = async (payload, endPoint) => {
     try {
         switch (endPoint) {
             case "/student":
-                responseMdl = await studentCon.getStudent(payload.id);
+                responseMdl = await studentCon.getStudent(payload);
                 break;
             case "/students":
-                responseMdl = await studentCon.getStudents();
+                responseMdl = await studentCon.getStudents(payload.userId);
                 break;
             case "/login":
                 responseMdl = await loginCon.getLogin(payload.userId);

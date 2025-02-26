@@ -9,6 +9,7 @@ import authorizationMw from "./middlewares/authorizationMw.js";
 import routes from "./routes/routes.js";
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocs from './swagger/swaggerDocs.js';
+import onAppStartMw from "./middlewares/onAppStartMw.js";
 
 
 /*OBJECT*/
@@ -19,10 +20,12 @@ const PORT = process.env.PORT || 8080;
 /*MIDDLEWARES<*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/adeptAbhiDocs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/adeptAbhi/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/adeptAbhi', onAppStartMw);
 app.use('/adeptAbhi', (req, res, next) => {
     log.info('App/Type', req.method);
     log.info('App/Headers', req.headers);
+    //log.info('App/Params', req.query);
     log.info('App/URL', req.originalUrl);
     log.info('App/EndPoint', req.path);
     log.info("App/Payload", req.body);
@@ -31,16 +34,16 @@ app.use('/adeptAbhi', (req, res, next) => {
     });
     next();
 });
+
 /*Authorization:401*/
 app.use('/adeptAbhi', async (req, res, next) => {
-    if (req.path != '/login') {
+    if (!(req.path == '/login' && req.method == 'POST')) {
         var responseMdl = await authorizationMw(req.headers, 18);
         if (!responseMdl.status) {
             res.status(responseMdl.msg == 'unauthorization' ? 401 : 400).json(responseMdl.toJson());
             return;
         }
     }
-    req.body['userId'] = req.headers.userid;
     next();
 });
 

@@ -18,6 +18,10 @@ const getPayloadMw = (payload, endPoint) => {
             responseMdl.msg = 'Url Not Found';
             break;
     }
+
+    if (responseMdl.msg.toString().toLowerCase().includes("missing")) {
+        responseMdl.msg += ' in params'
+    }
     return responseMdl;
 }
 
